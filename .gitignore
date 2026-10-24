@@ -1,0 +1,15 @@
+# Python caches / bytecode
+__pycache__/
+*.pyc
+
+# Local SQLite databases
+*.db
+
+# Virtual environments
+.venv/
+
+# Test caches
+.pytest_cache/
+
+# Packaging artifacts
+*.egg-info/

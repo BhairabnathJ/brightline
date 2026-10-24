@@ -62,3 +62,9 @@ def get_route(route_id: int, db: Session = Depends(get_db)) -> Any:
         "eta_local": arrival_local.isoformat(),
         "driver_timezone": driver_tz,
     }
+
+
+# TODO(L3): add GET /routes/{id}/eta computing eta from distance and average_speed
+#           (eta = distance / average_speed; unknown route id -> 404). Intentionally
+#           NOT implemented on this ticket branch — the endpoint must remain absent
+#           (request currently returns 404) until the ticket is solved.

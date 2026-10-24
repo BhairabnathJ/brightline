@@ -72,4 +72,4 @@ def localize_arrival(
 
     arrival_utc = departure + timedelta(hours=eta_hours)
     # Correct behavior: convert the absolute instant into the driver's zone.
-    return arrival_utc.astimezone(ZoneInfo(driver_timezone))
+    return arrival_utc.replace(tzinfo=ZoneInfo(driver_timezone))

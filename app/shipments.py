@@ -84,8 +84,8 @@ def list_shipments(
             "pageSize", f"pageSize must not exceed {maxPageSize}"
         )
 
-    # CORRECT pagination arithmetic (the L1 branch breaks exactly this line).
-    offset = page * pageSize
+    # Attempted fix (still wrong: off-by-one in the other direction).
+    offset = (page - 1) * pageSize + 1
 
     total_count = db.scalar(select(func.count()).select_from(Shipment)) or 0
 

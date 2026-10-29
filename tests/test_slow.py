@@ -30,7 +30,7 @@ def test_deliberately_slow_is_strictly_slowest() -> None:
 
     The ``time.sleep`` below is deliberate: it makes this the strictly-slowest
     test so tooling that flags slow tests has a clear target. It asserts only a
-    trivial truth so it always passes on ``main`` and on every ticket branch.
+    trivial truth so it always passes.
     """
     # MOCK-free intentional delay — this is the imperfection itself, not setup.
     time.sleep(_DELIBERATE_SLEEP_SECONDS)

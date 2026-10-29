@@ -8,10 +8,6 @@ DEPRECATED (legacy): this module is the original route resource and is kept for
 backwards compatibility. It predates the planned dedicated ETA endpoint and
 embeds the ETA inline in the route payload. Prefer the forthcoming dedicated
 ETA endpoint once it lands. Do not extend this legacy module with new routes.
-
-NOTE (L3 context): the dedicated ``GET /routes/{id}/eta`` feature is
-intentionally ABSENT on ``main`` and on the L3 ticket branch — it is added only
-in the L3 reference solution. Do not add it here.
 """
 
 from __future__ import annotations
@@ -47,8 +43,7 @@ def get_route(route_id: int, db: Session = Depends(get_db)) -> Any:
     eta_hours = compute_eta_hours(route.distance, route.average_speed)
 
     # Localize the arrival to the driver's timezone when a driver is assigned;
-    # fall back to UTC otherwise. This is the correct reference behavior; the
-    # L2 branch drops this conversion.
+    # fall back to UTC otherwise.
     driver_tz = route.driver.timezone if route.driver is not None else "UTC"
     arrival_local = localize_arrival(eta_hours, driver_tz)
 

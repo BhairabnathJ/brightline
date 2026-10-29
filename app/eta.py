@@ -4,11 +4,6 @@ The base ETA is a pure function of a route's distance and average speed:
 ``eta_hours = distance / average_speed``. A separate helper localizes the
 arrival instant to the driving driver's timezone so callers can present an
 arrival time in the driver's local wall clock.
-
-NOTE (L2 context): the timezone localization here is the *correct* reference
-behavior on ``main``. The L2 ticket branch deliberately drops the conversion so
-non-UTC drivers get ETAs that are wrong by whole hours; do not "simplify" the
-``ZoneInfo`` handling below into a naive/UTC-only path.
 """
 
 from __future__ import annotations
@@ -47,8 +42,7 @@ def localize_arrival(
     Computes ``departure + eta_hours`` as an absolute instant, then converts it
     into ``driver_timezone`` so the returned ``datetime`` carries the driver's
     local wall-clock time and offset. The underlying instant is the same for
-    every driver; only the presented local time differs by the true zone offset
-    — the conversion is never dropped (the L2 bug branch drops exactly this).
+    every driver; only the presented local time differs by the true zone offset.
 
     Args:
         eta_hours: Travel time in hours, as returned by ``compute_eta_hours``.
@@ -71,5 +65,5 @@ def localize_arrival(
         departure = departure.replace(tzinfo=timezone.utc)
 
     arrival_utc = departure + timedelta(hours=eta_hours)
-    # Correct behavior: convert the absolute instant into the driver's zone.
+    # Express the arrival in the driver's local time.
     return arrival_utc.astimezone(ZoneInfo(driver_timezone))

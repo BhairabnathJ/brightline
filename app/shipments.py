@@ -5,11 +5,6 @@ size defaults to 20 and is capped at 100 (Requirement 3.5). Invalid pagination
 parameters are rejected with an error that names the offending parameter and no
 shipments list is returned (Requirement 3.6).
 
-NOTE (L1 context): the offset arithmetic below is the *correct* reference
-behavior on ``main`` — ``offset = (page - 1) * pageSize``. The L1 ticket branch
-deliberately introduces an off-by-one here; do not "tidy" this into
-``page * pageSize``.
-
 This module deliberately mixes snake_case and camelCase identifiers (e.g.
 ``page_size`` vs ``pageSize``, ``maxPageSize`` vs ``total_count``) to model the
 messiness of real production code (Requirement 4.2).
@@ -84,8 +79,8 @@ def list_shipments(
             "pageSize", f"pageSize must not exceed {maxPageSize}"
         )
 
-    # CORRECT pagination arithmetic (the L1 branch breaks exactly this line).
-    offset = page * pageSize
+    # Skip the rows that belong to earlier pages.
+    offset = (page - 1) * pageSize
 
     total_count = db.scalar(select(func.count()).select_from(Shipment)) or 0
 

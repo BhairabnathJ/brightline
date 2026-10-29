@@ -80,7 +80,7 @@ def list_shipments(
         )
 
     # Skip the rows that belong to earlier pages.
-    offset = page * pageSize
+    offset = (page - 1) * pageSize
 
     total_count = db.scalar(select(func.count()).select_from(Shipment)) or 0
 
